@@ -1,0 +1,27 @@
+Libbmp085 installation howto
+
+1. Download the source code of the library.
+2. Navigate to the folder where the source is located.
+
+	#cd <library_folder>
+
+3. Build the shared library object:
+
+	#make
+
+4. Install the library with:
+
+	#sudo make install
+
+The default destinations to install the lifrary files are:
+	- /usr/include for the header file: libbmp085.h
+	- /usr/lib     for the library: libbmp085.so
+
+The target folders are set by the PREFIX variable defined in the makefile.
+To install the library files in some other location update the value of
+the PREFIX variable.
+
+5. Update the dynamic linker run-time bindings by executing:
+
+	#sudo ldconfig
+    

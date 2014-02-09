@@ -1,0 +1,48 @@
+Libbmp085 is a simple, easy to use C library for communication with Bosh BMP085 barometric pressure and temperature sensor
+on Linux. The library implements functions for: connecting to BMP085 sensor over I2C bus; reading the sensor calibration
+table; initiates temperature and pressure measurement and reads measured values from the sensor. It supports all BMP085 modes 
+of operation.
+
+Usage
+
+The sensor properties and readings are defined in a structure called BMP085 that includes: I2C address, mode of operation, table with
+calibration coefficients and variables to store the values of the measured temperature and barometric pressure.
+
+typedef struct bmp085
+{
+	char i2cAddress;			  //I2C address of the sensor	
+	unsigned char calibrationCoeficients[22]; //calibration table
+	float temperature;			  //measured temperature value in degrees Celsius
+	long pressure;				  //sensor reading for barometric pressure in Pascals	
+	overSampling oss;			  //BMP085 mode of operation
+} BMP085;
+
+The following functions are included in the library:
+- int connect2BMP085(int *,char *,char). To establish connection with the BMP085 server. Returns 0 for successful connection, 1 for error;
+
+- int readBMP085CalibrationTable(int, BMP085 *); The function reads the calibration table of BMP085.
+  It returns 1 in case of communication error or 0  for successful data retrieval. Call this function before taking the measurement.
+
+- int BMP085takeMeasurement(int, BMP085 *); Reads the current temperature and pressure from the sensor and updates the structure BMP085 
+  with the readings from the sensor.
+  The function returns 0 in case of successful reading, or 1 if there is error during the communication with the sensor.
+  ReadBMP085CalibrationTable function must be called before taking the measurement.
+
+- void printBMP085CalibrationTable(BMP085 *); The function prints the calibration table of the BMP085 sensor.
+  ReadBMP085CalibrationTable must be called first.
+ 
+The library is distributed with an example program that measures temperature and barometric pressure using BMP085 sensor module from Adafruit (Adafruit product ID 391) connected to Raspberry Pi model B. 
+
+
+WARNING: The library is tested on Raspberry Pi Model B Revision 1 board with latest version of Rasbian Linux.
+Before use, always check the GPIO and I2C manuals for your Raspberry Pi board to
+take possible hardware changes on Pi board in consideration.
+
+The source is provided as it is without any warranty. Use it on your own risk!
+The author does not take any responsibility for the damage caused while using this software.
+
+
+
+
+
+
