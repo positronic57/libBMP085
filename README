@@ -1,6 +1,7 @@
 Libbmp085 is a simple, easy to use C library for communication with Bosh BMP085 barometric pressure and temperature sensor
-on Linux. The library implements functions for: connecting to BMP085 sensor over I2C bus; reading the sensor calibration
-table; initiates temperature and pressure measurement and reads measured values from the sensor. It supports all BMP085 modes 
+on Linux. It provides access to the BMP085 sensor from the userspace through the /dev interface. Module i2c-dev must be loaded before library use.
+The library implements functions for: connecting to BMP085 sensor over I2C bus; reading the sensor calibration table; 
+initiates temperature and pressure measurement and reads measured values from the sensor. It supports all BMP085 modes 
 of operation.
 
 Usage
