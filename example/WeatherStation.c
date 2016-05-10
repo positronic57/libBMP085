@@ -24,19 +24,32 @@
 #include "I2Cbus.h"
 #include "libbmp085.h"
 
+/* Prints a short help/command line arguments description. */
 void print_usage(const char *);
+/* Parser for the command line arguments. */
 void parse_opts(int argc, char *argv[]);
 
+/* I2C address of the sensor. Defined via a command line argument. */
 char I2CAddress;
+
+/* Linux device that represents the I2C bus/interface present on the system. */
 char *device = "/dev/i2c-0";
+
+/* Auxiliary variables for command line arguments parsing. */
 int measureTemperature,measurePressure = 0;
 int addressPresent, printSensorCalibrationTable = 0;
 int mode = 1;
 
 int main(int argc, char **argv)
 {
-    int I2CBus;
+    /* File descriptor for managing the I2C bus access. */
+	int I2CBus;
 
+	/* Define the structure that represents the BMP085 sensor. */
+	BMP085 *sensor;
+	sensor = (BMP085 *) malloc(sizeof(BMP085));
+
+	/* Parse the input arguments. */
 	parse_opts(argc,argv);	
 
 	if (!addressPresent)
@@ -53,28 +66,32 @@ int main(int argc, char **argv)
 		exit (1);
 	}
 
-	BMP085 *sensor;
-	sensor = (BMP085 *) malloc(sizeof(BMP085));
-	
+	/* Open the I2C bus for R/W access.
+	 * Must be called before trying to access the sensor.
+	 */
 	if (openI2CBus(&I2CBus,device))
 	{
 		printf("Failed to open I2C bus via device: %s.\n",device);
 		return 1;
 	}
 	
+	/* Init the BMP085 sensor by assigning the I2C bus, I2C address and mode of operation.
+	 * Must be called before any other sensor related function.
+	 */
 	if (BMP085_initSensor(sensor,&I2CBus,I2CAddress,mode))
 	{
-		printf("Failed to init BMP085 sensor.\n");
+		printf("BMP085 sensor initialization failed.\n");
 		return 1;
 	}
 
-
+	/* Print the calibration table of the sensor if requested by the command line argument. */
 	if (printSensorCalibrationTable)
 	{
 		printf("Table of calibration coefficients:\n");
 		BMP085_printCalibrationTable(sensor);
 	}
 
+	/* Print the temperature and/or pressure measurement(s). if requested by the command line arguments. */
     if (measureTemperature+measurePressure)
 	{
     	if (BMP085_takeMeasurement(sensor))
@@ -88,15 +105,17 @@ int main(int argc, char **argv)
 			printf("Pressure = %.2fhPa\n",(float)sensor->pressure/100.0);
 	}
 
-
+    /* Release the memory allocated for the BMP085 sensor. */
 	free(sensor);
 
+	/* Close the I2C bus. */
 	closeI2CBus(&I2CBus);
 
     return 0;
 
 }
 
+/* Prints a short help/command line arguments description. */
 void print_usage(const char *prog)
 {
         printf("Usage: %s [-adtTpm]\n", prog);
@@ -114,6 +133,7 @@ void print_usage(const char *prog)
 	exit(1);
 }
 
+/* Parser for the command line arguments. */
 void parse_opts(int argc, char *argv[])
 {
         while (1) {
