@@ -12,38 +12,26 @@
 #include "libbmp085.h"
 
 #include <stdio.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <sys/ioctl.h>
-#include <linux/i2c-dev.h>
-#include <time.h>
+#include "I2Cbus.h"
 
-int readBMP085CalibrationTable(int fd, BMP085 *sensor)
+const long BMP085_PressureConversionTime[]={ 5000000L, 8000000L, 14000000L, 26000000L };
+
+int BMP085_initSensor(BMP085 *sensor,int *I2Cbus,unsigned char I2CAddress,overSampling oss)
 {
-    unsigned char cTableAddr = 0xAA;
-
-	if (write(fd,&cTableAddr,1)!=1)
-		return 1;
-
-    if (read(fd,sensor->calibrationCoeficients,22)!=22)
-		return 1;
-
-	return 0;
+	sensor->I2CBus=*I2Cbus;
+	sensor->oss=oss;
+	sensor->I2CAddress=I2CAddress;
+	return I2CSensor_Read(&(sensor->I2CBus),sensor->I2CAddress,BMP085_CALIBRATION_TABLE,sensor->calibrationCoeficients,22);
 }
 
-
-int BMP085takeMeasurement(int fd, BMP085 *sensor)
+int BMP085_takeMeasurement(BMP085 *sensor)
 {
-	const long pressureConversionTime[]={ 5000000L, 8000000L, 14000000L, 26000000L };
-	unsigned short startTempMeas = STARTTEMPMEAS;
-    unsigned char tempMSBAddr = TEMPADDR, tempLSBAddr = TEMPADDR + 1;
-    unsigned char rawTempMSB,rawTempLSB;
-    long rawTemperature,temperature = 0;
-
-    unsigned short STARTPRESMEAS = createUword((0x34+((sensor->oss)<<6)),0xF4);
-    unsigned char pMSBAddress = TEMPADDR, pLSBAddress = 0xF7, pXLSBAddress = 0xF8;
-    unsigned char pMSB, pLSB, pXLSB;
+	long rawTemperature,temperature = 0;
     long rawPressure = 0, pressure = 0;
+
+    long x1, x2, x3, b3, b5, b6 = 0;
+    unsigned long b4, b7 = 0;
 
     short ac1 = createSword(sensor->calibrationCoeficients[0],sensor->calibrationCoeficients[1]);
     short ac2 = createSword(sensor->calibrationCoeficients[2],sensor->calibrationCoeficients[3]);
@@ -56,54 +44,31 @@ int BMP085takeMeasurement(int fd, BMP085 *sensor)
     short mc = createSword(sensor->calibrationCoeficients[18],sensor->calibrationCoeficients[19]);
     short md = createSword(sensor->calibrationCoeficients[20],sensor->calibrationCoeficients[21]);
 
-    struct timespec timer = {
-    		.tv_sec = 0,
-            .tv_nsec = pressureConversionTime[sensor->oss],
-    };
-
-    long x1, x2, x3, b3, b5, b6 = 0;
-    unsigned long b4, b7 =0;
-
-    //Send the command to start the temperature measurement
-    if (write(fd,&startTempMeas,2)!=2)
+    // Send the command to start the temperature measurement.
+    if (I2CSensor_Write(&(sensor->I2CBus),sensor->I2CAddress,BMP085_CONTROL_REG,BMP085_START_TEMPERATURE_MEASUREMENT))
     	return 1;
 
     // wait 4.5ms and then read the temperature raw value
-    nanosleep(&timer, NULL);
+    tDelay(BMP085_PressureConversionTime[sensor->oss]);
 
-    //read the temperature raw value
-    if (write(fd,&tempMSBAddr,1)!=1)
+    // Read the temperature raw value
+    if (I2CSensor_Read(&(sensor->I2CBus),sensor->I2CAddress,BMP085_DATA_REG_MSB,sensor->rawTemperatureData,2))
     	return 1;
-    if (read(fd,&rawTempMSB,1)!=1)
-    	return 1;
-    if (write(fd,&tempLSBAddr,1)!=1)
-    	return 1;
-    if (read(fd,&rawTempLSB,1)!=1)
+    rawTemperature = (long)((sensor->rawTemperatureData[0]<<8)+sensor->rawTemperatureData[1]);
+
+	// Send the command to start the pressure measurement.
+    if (I2CSensor_Write(&(sensor->I2CBus),sensor->I2CAddress,BMP085_CONTROL_REG,(BMP085_START_PRESSURE_MEASUREMENT+(sensor->oss<<6))))
     	return 1;
 
-    rawTemperature = (long)((rawTempMSB<<8)+rawTempLSB);
+	// Wait for the pressure conversion to be done.
+	tDelay(BMP085_PressureConversionTime[sensor->oss]);
 
-	//Send the command to start the pressure measurement
-	if (write(fd,&STARTPRESMEAS,2)!=2)
+	// Read the pressure raw value.
+	if (I2CSensor_Read(&(sensor->I2CBus),sensor->I2CAddress,BMP085_DATA_REG_MSB,sensor->rawPressureData,2))
 		return 1;
-
-	//wait 4.5ms and then read the pressure raw value
-	nanosleep(&timer,NULL);
-
-	//read the pressure raw value
-	if (write(fd,&pMSBAddress,1)!=1)
-		return 1;
-	if (read(fd,&pMSB,1)!=1)
-		return 1;
-	if (write(fd,&pLSBAddress,1)!=1)
-		return 1;
-    if (read(fd,&pLSB,1)!=1)
+    if (I2CSensor_Read(&(sensor->I2CBus),sensor->I2CAddress,BMP085_DATA_REG_XLASB,&(sensor->rawPressureData[2]),1))
     	return 1;
-    if (write(fd,&pXLSBAddress,1)!=1)
-    	return 1;
-    if (read(fd,&pXLSB,1)!=1)
-    	return 1;
-	rawPressure = ((pMSB<<16) + (pLSB<<8) + pXLSB)>>(8-sensor->oss);
+	rawPressure = ((sensor->rawPressureData[0]<<16) + (sensor->rawPressureData[1]<<8) + sensor->rawPressureData[2])>>(8-sensor->oss);
 
 	//calculate the real temperature value
     x1 = ((rawTemperature - ac6)*ac5)>>15;
@@ -137,7 +102,7 @@ int BMP085takeMeasurement(int fd, BMP085 *sensor)
 }
 
 
-void printBMP085CalibrationTable(BMP085 *sensor)
+void BMP085_printCalibrationTable(BMP085 *sensor)
 {
 	const char *calCoefName[] = {"AC1","AC2","AC3","AC4","AC5","AC6","B1","B2","MB","MC","MD"};
 	unsigned char i;
@@ -157,16 +122,5 @@ void printBMP085CalibrationTable(BMP085 *sensor)
 	}
 	printf("\n");
 
-}
-
-
-int connect2BMP085(int *sfd,char * device,char saddr)
-{
-        *sfd = open(device, O_RDWR);
-        if (*sfd<0)
-	        return(1);
-        if (ioctl(*sfd,I2C_SLAVE,saddr)<0)
-                return(1);
-	return(0);
 }
 

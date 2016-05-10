@@ -1,4 +1,5 @@
 Libbmp085 installation howto
+============================
 
 1. Download the source code of the library.
 2. Navigate to the folder where the source is located.
@@ -25,3 +26,10 @@ the PREFIX variable.
 
 	#sudo ldconfig
     
+
+Uninstall
+----------
+
+Remove the library from the system with:
+
+	#sudo make uninstall

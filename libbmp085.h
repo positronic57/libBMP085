@@ -15,9 +15,14 @@
 #define createUword(MSB,LSB) (unsigned short)((MSB << 8) | LSB)
 #define createSword(MSB,LSB) (short)((MSB << 8) | LSB)
 
-#define STARTTEMPMEAS 0x2EF4
-#define CALTABLEADDR 0xAA
-#define TEMPADDR 0xF6
+#define BMP085_CALIBRATION_TABLE 0xAA
+#define BMP085_DATA_REG_MSB 0xF6
+#define BMP085_DATA_REG_LSB 0xF7
+#define BMP085_DATA_REG_XLASB 0xF8
+#define BMP085_CONTROL_REG 0xF4
+
+#define BMP085_START_TEMPERATURE_MEASUREMENT 0x2E
+#define BMP085_START_PRESSURE_MEASUREMENT 0x34
 
 typedef enum oversampling
 {
@@ -29,8 +34,11 @@ typedef enum oversampling
 
 typedef struct bmp085
 {
-	char i2cAddress;
+	char I2CAddress;
+	int I2CBus;
 	unsigned char calibrationCoeficients[22];
+	unsigned char rawPressureData[3];
+	unsigned char rawTemperatureData[2];
 	float temperature;
 	long pressure;
 	overSampling oss;
@@ -44,7 +52,8 @@ typedef struct bmp085
  * before taking the measurement.
  *
  */
-int readBMP085CalibrationTable(int, BMP085 *);
+int BMP085_initSensor(BMP085 *sensor,int *I2Cbus,unsigned char I2CAddress,overSampling oss);
+
 
 /*
  * Read the current temperature and pressure from the sensor.
@@ -53,18 +62,12 @@ int readBMP085CalibrationTable(int, BMP085 *);
  * readBMP085CalibrationTable function must be called before
  * taking the measurement.
  */
-int BMP085takeMeasurement(int, BMP085 *);
+int BMP085_takeMeasurement(BMP085 *sensor);
 
 /*
  * The function prints the calibration table of the BMP085 sensor.
  * readBMP085CalibrationTable must be called first.
  */
-void printBMP085CalibrationTable(BMP085 *);
-
-/*
- * Establish connection with the BMP085 server.
- * Returns 0 for successful connection, 1 for error.
- */
-int connect2BMP085(int *,char *,char);
+void BMP085_printCalibrationTable(BMP085 *sensor);
 
 #endif /* LIBBMP085_H_ */
