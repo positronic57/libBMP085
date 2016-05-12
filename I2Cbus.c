@@ -12,6 +12,11 @@
  * the Free Software Foundation; either version 2 of the License.
  */
 
+/** @file I2Cbus.c
+ *  @brief Implements the functions defined in the header file I2Cbus.h.
+ *	@date May 9, 2016
+ *  @author Goce Boshkovski
+ */
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
@@ -19,6 +24,7 @@
 #include <fcntl.h>
 #include "I2Cbus.h"
 
+/* Open I2C bus for R/W access. */
 int openI2CBus(int *bus,char * device)
 {
         *bus = open(device, O_RDWR);
@@ -28,6 +34,7 @@ int openI2CBus(int *bus,char * device)
         return 0;
 }
 
+/* Close the access to the I2C bus. */
 int closeI2CBus(int *bus)
 {
 	if (*bus)
@@ -37,6 +44,7 @@ int closeI2CBus(int *bus)
 
 }
 
+/* Read data from the sensor via I2C bus. */
 int I2CSensor_Read(int *bus,unsigned char I2CAddress,unsigned char registry,unsigned char *buffer,int size)
 {
 	/*Select the sensor on the I2C bus with an address as a slave device.*/
@@ -54,6 +62,7 @@ int I2CSensor_Read(int *bus,unsigned char I2CAddress,unsigned char registry,unsi
 	return 0;
 }
 
+/* Sends data to the sensor by writing data on the I2C bus. */
 int I2CSensor_Write(int *bus,unsigned char I2CAddress,unsigned char registry,unsigned char value)
 {
 	unsigned char tbuffer[2] = { registry, value };
@@ -69,6 +78,7 @@ int I2CSensor_Write(int *bus,unsigned char I2CAddress,unsigned char registry,uns
 	return 0;
 }
 
+/* A time delay function.*/
 void tDelay(long interval)
 {
     struct timespec timer;

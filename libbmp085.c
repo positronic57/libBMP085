@@ -9,6 +9,11 @@
  * the Free Software Foundation; either version 2 of the License.
  */
 
+/** @file libbmp085.c
+ *  @brief Implements the functions defined in the header file libbmp085.h.
+ *
+ *  @author Goce Boshkovski
+ */
 #include "libbmp085.h"
 
 #include <stdio.h>
@@ -17,6 +22,7 @@
 
 const long BMP085_PressureConversionTime[]={ 5000000L, 8000000L, 14000000L, 26000000L };
 
+/* Sensor initialization. */
 int BMP085_initSensor(BMP085 *sensor,int *I2Cbus,unsigned char I2CAddress,overSampling oss)
 {
 	sensor->I2CBus=*I2Cbus;
@@ -25,6 +31,7 @@ int BMP085_initSensor(BMP085 *sensor,int *I2Cbus,unsigned char I2CAddress,overSa
 	return I2CSensor_Read(&(sensor->I2CBus),sensor->I2CAddress,BMP085_CALIBRATION_TABLE,sensor->calibrationCoeficients,22);
 }
 
+/* Starts a temperature and pressure sampling. */
 int BMP085_takeMeasurement(BMP085 *sensor)
 {
 	long rawTemperature,temperature = 0;
@@ -101,7 +108,7 @@ int BMP085_takeMeasurement(BMP085 *sensor)
 	return 0;
 }
 
-
+/* Prints the calibration table of the sensor on the standard output. */
 void BMP085_printCalibrationTable(BMP085 *sensor)
 {
 	const char *calCoefName[] = {"AC1","AC2","AC3","AC4","AC5","AC6","B1","B2","MB","MC","MD"};

@@ -42,7 +42,7 @@ int mode = 1;
 
 int main(int argc, char **argv)
 {
-    /* File descriptor for managing the I2C bus access. */
+	/* File descriptor for managing the I2C bus access. */
 	int I2CBus;
 
 	/* Define the structure that represents the BMP085 sensor. */
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Print the temperature and/or pressure measurement(s). if requested by the command line arguments. */
-    if (measureTemperature+measurePressure)
+	if (measureTemperature+measurePressure)
 	{
     	if (BMP085_takeMeasurement(sensor))
 		{
