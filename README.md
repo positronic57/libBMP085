@@ -1,6 +1,6 @@
 LibBMP085
 ===========
-Libbmp085 is a simple, easy to use C library for communication with Bosh BMP085 barometric pressure and temperature sensor
+LibBMP085 is a simple, easy to use C library for communication with Bosh BMP085 barometric pressure and temperature sensor
 on Linux. It provides access to the BMP085 sensor from the userspace through the /dev interface. 
 Module i2c-dev must be loaded before library use.
 

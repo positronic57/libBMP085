@@ -1,6 +1,5 @@
-
 # Makefile for building the examples distributed 
-# with libsetila.
+# with libBMP085 library.
 
 # Header files path (Update this with the library installation folder).
 HEADERS_PATH = /usr/include

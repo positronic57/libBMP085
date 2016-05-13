@@ -28,7 +28,7 @@
 #ifndef I2CBUS_H_
 #define I2CBUS_H_
 
-/** \defgroup I2C_BUS_ERROR_CODES I2C error codes. */
+/** \defgroup I2C_BUS_ERROR_CODES I2C error codes */
 /* @{ */
 #define ERROR_OPEN_I2C_BUS 1
 #define ERROR_CLOSE_I2C_BUS 2
@@ -36,7 +36,7 @@
 #define ERROR_I2C_WRITE_FAILED 4
 /* @} */
 
-/** \defgroup SENSE_HAT_FUNC Sense HAT functions */
+/** \defgroup I2CBUS_FUNC I2C bus functions */
 /* @{ */
 
 /**
@@ -69,7 +69,7 @@ int closeI2CBus(int *bus);
 int I2CSensor_Read(int *bus,unsigned char I2CAddress,unsigned char registry,unsigned char *buffer,int size);
 
 /**
- * @data Sends data to the sensor by writing data on the I2C bus.
+ * @brief Sends data to the sensor by writing data on the I2C bus.
  *
  * @param [in] bus	file descriptor of the opened I2C device file.
  * @param [in] I2CAddress address of the sensor on the I2C bus.

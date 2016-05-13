@@ -75,14 +75,14 @@ typedef struct bmp085
 	int I2CBus;	/**< File descriptor for accessing I2C bus.*/
 	unsigned char calibrationCoeficients[22];	/**< Bosch BMP085 calibration table.*/
 	unsigned char rawPressureData[3]; /**< Buffer for the raw pressure data reading from the sensor.*/
-	unsigned char rawTemperatureData[2];	/**< Buffer for the raw pressure data reading from the sensor.*/
+	unsigned char rawTemperatureData[2];	/**< Buffer for the raw temperature data reading from the sensor.*/
 	float temperature;	/**< Last temperature reading in degrees Celsius. */
 	long pressure;	/**< Last barometric pressure reading in Pa. */
 	overSampling oss;	/**< Bosch BMP085 sensor mode of operation for the pressure measurement. */
 } BMP085;
 
 
-/** \defgroup SENSE_HAT_FUNC Sense HAT functions */
+/** \defgroup LIBBMP085_FUNC libBMP085 functions */
 /* @{ */
 
 /**
@@ -97,7 +97,7 @@ typedef struct bmp085
  * @param[in,out] sensor pointer to the structure that represents the sensor.
  * @param[in] I2Cbus pointer to the file descriptor of the I2C bus present on the system.
  * @param[in] I2CAddress address of the sensor on the I2C bus.
- * @param[in] defining the over sampling mode of the sensor for the pressure measurement.
+ * @param[in] oss defining the over sampling mode of the sensor for the pressure measurement.
  * @return int returns 0 for successful operation, 1 for failure.
  */
 int BMP085_initSensor(BMP085 *sensor,int *I2Cbus,unsigned char I2CAddress,overSampling oss);
