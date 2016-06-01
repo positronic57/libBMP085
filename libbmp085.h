@@ -55,6 +55,11 @@
 #define BMP085_START_PRESSURE_MEASUREMENT 0x34
 /* @} */
 
+/** \defgroup CONST Average sea level pressure. */
+/* @{ */
+#define AVERAGE_SEA_LEVEL_PRESSURE 1013.25
+/* @} */
+
 /**
  * @brief Barometric pressure measurement modes.
  */
@@ -125,5 +130,17 @@ int BMP085_takeMeasurement(BMP085 *sensor);
  */
 void BMP085_printCalibrationTable(BMP085 *sensor);
 /* @} */
+
+/**
+ * @brief Calculates the relative altitude changes in [m] based on pressure difference between two measurement points.
+ *
+ * If the average sea level pressure is used as a reference point,
+ * the function will return the altitude above sea level in [m].
+ *
+ * @param[in] lastPressureReading Last pressure reading.
+ * @param[in] baseLinePressure Reference pressure for calculating the relative altitude changes.
+ * @return int The relative altitude change due to difference in pressure values.
+ */
+int BMP085_Altitude(double lastPressureReading,double baseLinePressure);
 
 #endif /* LIBBMP085_H_ */

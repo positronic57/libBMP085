@@ -1,5 +1,6 @@
+
 # Makefile for building the examples distributed 
-# with libBMP085 library.
+# with libsetila.
 
 # Header files path (Update this with the library installation folder).
 HEADERS_PATH = /usr/include
@@ -22,7 +23,7 @@ OBJECTS += $(SOURCES:.c=.o)
 #Building libMAX7221example executable
 WeatherStation: WeatherStation.o
 	@echo Building target file: $@. 
-	gcc -o $@ $^ -L$(LIBRARY_PATH) -lbmp085
+	gcc -o $@ $^ -L$(LIBRARY_PATH) -lbmp085 -lm
 	@echo 
 
 .PHONY: clean

@@ -18,7 +18,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">LibBMP085
-   &#160;<span id="projectnumber">v1.0</span>
+   &#160;<span id="projectnumber">v1.1</span>
    </div>
    <div id="projectbrief">C library for communication with Bosh BMP085/BMP180 barometric pressure and temperature sensor on Linux.</div>
   </td>
@@ -87,6 +87,8 @@ Macros</h2></td></tr>
 <tr class="separator:ga51130aff839809912b579ea940666dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga13cbe45c3eb68e8a141048f0ea40bc11"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__SENSOR__CMD.html#ga13cbe45c3eb68e8a141048f0ea40bc11">BMP085_START_PRESSURE_MEASUREMENT</a>&#160;&#160;&#160;0x34</td></tr>
 <tr class="separator:ga13cbe45c3eb68e8a141048f0ea40bc11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa3475bbfd97d768815f6f88c2dea0071"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__CONST.html#gaa3475bbfd97d768815f6f88c2dea0071">AVERAGE_SEA_LEVEL_PRESSURE</a>&#160;&#160;&#160;1013.25</td></tr>
+<tr class="separator:gaa3475bbfd97d768815f6f88c2dea0071"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -118,6 +120,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga7dcd30573451e5a5aa03b4641cd63687"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__LIBBMP085__FUNC.html#ga7dcd30573451e5a5aa03b4641cd63687">BMP085_printCalibrationTable</a> (<a class="el" href="libbmp085_8h.html#ada6aa6d41d6459c19eb196b4dafb85ff">BMP085</a> *sensor)</td></tr>
 <tr class="memdesc:ga7dcd30573451e5a5aa03b4641cd63687"><td class="mdescLeft">&#160;</td><td class="mdescRight">The function prints the calibration table of the BMP085 sensor on the standard output.  <a href="group__LIBBMP085__FUNC.html#ga7dcd30573451e5a5aa03b4641cd63687">More...</a><br /></td></tr>
 <tr class="separator:ga7dcd30573451e5a5aa03b4641cd63687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a769e93ba394b4565c3a6fe2dd8800e70"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="libbmp085_8h.html#a769e93ba394b4565c3a6fe2dd8800e70">BMP085_Altitude</a> (double lastPressureReading, double baseLinePressure)</td></tr>
+<tr class="memdesc:a769e93ba394b4565c3a6fe2dd8800e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the relative altitude changes in [m] based on pressure difference between two measurement points.  <a href="#a769e93ba394b4565c3a6fe2dd8800e70">More...</a><br /></td></tr>
+<tr class="separator:a769e93ba394b4565c3a6fe2dd8800e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file part of libBMP085 library. It contains the prototypes of functions available in the library, definitions of macros and constants. </p>
@@ -177,10 +182,48 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a769e93ba394b4565c3a6fe2dd8800e70"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BMP085_Altitude </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lastPressureReading</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>baseLinePressure</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculates the relative altitude changes in [m] based on pressure difference between two measurement points. </p>
+<p>If the average sea level pressure is used as a reference point, the function will return the altitude above sea level in [m].</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lastPressureReading</td><td>Last pressure reading. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">baseLinePressure</td><td>Reference pressure for calculating the relative altitude changes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int The relative altitude change due to difference in pressure values. </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue May 31 2016 18:29:01 for LibBMP085 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 1 2016 22:56:59 for LibBMP085 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

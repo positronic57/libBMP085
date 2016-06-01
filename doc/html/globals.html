@@ -18,7 +18,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">LibBMP085
-   &#160;<span id="projectnumber">v1.0</span>
+   &#160;<span id="projectnumber">v1.1</span>
    </div>
    <div id="projectbrief">C library for communication with Bosh BMP085/BMP180 barometric pressure and temperature sensor on Linux.</div>
   </td>
@@ -56,6 +56,7 @@
   </div>
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
+      <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_e"><span>e</span></a></li>
@@ -71,9 +72,20 @@
 <div class="contents">
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
+<li>AVERAGE_SEA_LEVEL_PRESSURE
+: <a class="el" href="group__CONST.html#gaa3475bbfd97d768815f6f88c2dea0071">libbmp085.h</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
 <li>BMP085
 : <a class="el" href="libbmp085_8h.html#ada6aa6d41d6459c19eb196b4dafb85ff">libbmp085.h</a>
+</li>
+<li>BMP085_Altitude()
+: <a class="el" href="libbmp085_8c.html#a769e93ba394b4565c3a6fe2dd8800e70">libbmp085.c</a>
+, <a class="el" href="libbmp085_8h.html#a769e93ba394b4565c3a6fe2dd8800e70">libbmp085.h</a>
 </li>
 <li>BMP085_CALIBRATION_TABLE
 : <a class="el" href="group__SENSOR__ADDR__DEF.html#ga9c03a0bf2271c8fceeab481cf8f5c40a">libbmp085.h</a>
@@ -91,8 +103,8 @@
 : <a class="el" href="group__SENSOR__ADDR__DEF.html#gaa61ac4ddc42ad98f453be8d7cfff3864">libbmp085.h</a>
 </li>
 <li>BMP085_initSensor()
-: <a class="el" href="group__LIBBMP085__FUNC.html#ga4a02cf770a0ed62d8a66654701217b98">libbmp085.h</a>
-, <a class="el" href="group__LIBBMP085__FUNC.html#ga4a02cf770a0ed62d8a66654701217b98">libbmp085.c</a>
+: <a class="el" href="group__LIBBMP085__FUNC.html#ga4a02cf770a0ed62d8a66654701217b98">libbmp085.c</a>
+, <a class="el" href="group__LIBBMP085__FUNC.html#ga4a02cf770a0ed62d8a66654701217b98">libbmp085.h</a>
 </li>
 <li>BMP085_PressureConversionTime
 : <a class="el" href="libbmp085_8c.html#ad9615c625d2c87851715cb2d98bcb448">libbmp085.c</a>
@@ -108,8 +120,8 @@
 : <a class="el" href="group__SENSOR__CMD.html#ga51130aff839809912b579ea940666dfc">libbmp085.h</a>
 </li>
 <li>BMP085_takeMeasurement()
-: <a class="el" href="group__LIBBMP085__FUNC.html#ga447a4e2e2b60fa332391aa9f6576cde6">libbmp085.h</a>
-, <a class="el" href="group__LIBBMP085__FUNC.html#ga447a4e2e2b60fa332391aa9f6576cde6">libbmp085.c</a>
+: <a class="el" href="group__LIBBMP085__FUNC.html#ga447a4e2e2b60fa332391aa9f6576cde6">libbmp085.c</a>
+, <a class="el" href="group__LIBBMP085__FUNC.html#ga447a4e2e2b60fa332391aa9f6576cde6">libbmp085.h</a>
 </li>
 </ul>
 
@@ -168,11 +180,11 @@
 : <a class="el" href="group__I2CBUS__FUNC.html#gab4c9373b2e17e9d038c65f865e0b619a">I2Cbus.c</a>
 , <a class="el" href="group__I2CBUS__FUNC.html#gab4c9373b2e17e9d038c65f865e0b619a">I2Cbus.h</a>
 </li>
-<li>oversampling
-: <a class="el" href="libbmp085_8h.html#a3eeede92f31e96105c5aa810368af4e4">libbmp085.h</a>
-</li>
 <li>overSampling
 : <a class="el" href="libbmp085_8h.html#af277b279860adcf9f25920687fe95dd5">libbmp085.h</a>
+</li>
+<li>oversampling
+: <a class="el" href="libbmp085_8h.html#a3eeede92f31e96105c5aa810368af4e4">libbmp085.h</a>
 </li>
 </ul>
 
@@ -203,7 +215,7 @@
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue May 31 2016 18:29:01 for LibBMP085 by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 1 2016 22:56:59 for LibBMP085 by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

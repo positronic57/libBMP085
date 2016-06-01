@@ -18,6 +18,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
 #include "I2Cbus.h"
 
 const long BMP085_PressureConversionTime[]={ 5000000L, 8000000L, 14000000L, 26000000L };
@@ -129,5 +130,11 @@ void BMP085_printCalibrationTable(BMP085 *sensor)
 	}
 	printf("\n");
 
+}
+
+/* Calculates the relative altitude changes based on pressure differences at two measurement points. */
+int BMP085_Altitude(double lastPressureReading,double baseLinePressure)
+{
+	return round(44330*(1-pow((lastPressureReading/baseLinePressure),(1/5.255))));
 }
 
